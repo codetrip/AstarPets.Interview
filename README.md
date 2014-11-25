@@ -20,9 +20,11 @@ The available shipping options are stored in App_Data\Shipping.xml.
 4. When done, get the code back to us.  Bonus points for a pull request, but if you're new to DVCS don't worry - just zip up the code and email it.
 
 **Time allowed:**
+
 There is no time limit, but hopefully it shouldn't take you longer than about an hour.
 
 **Tips:**
+
 1. App_Data\Shipping.xml is created with the CreateSampleData unit test. You should add to this to create your extended version of this file.
 2. Don't forget to add any new Shipping types to the KnownTypes method on ShippingBase.
 3. The Controller action used for the page is the Index action on the HomeController.
