@@ -34,7 +34,7 @@ Part 2 - Design
 ---------------
 We'd like the Shipping App to use the Unit of Work pattern.  For the purposes of this assignment, the Unit of Work pattern means:
 
-The framework takes care of persisting all data at the end of a defined "unit of work".
+*The framework takes care of persisting all data at the end of a defined "unit of work".*
 
 In concrete terms, as the Shipping App is a web app, a "unit of work" will be a web request.  This means that the application code should not be explicitly saving the basket after modification, but instead the framework should somehow know that it has changed and save it at the end of the web request.
 
