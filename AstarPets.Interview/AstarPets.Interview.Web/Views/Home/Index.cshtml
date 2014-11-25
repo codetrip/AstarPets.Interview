@@ -1,0 +1,58 @@
+﻿@model AstarPets.Interview.Web.Views.Home.InterviewViewModel
+@using AstarPets.Interview.Business.Shipping 
+@using AstarPets.Interview.Web
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Astar Pets Shipping App</h2>
+
+<fieldset>
+    <h2>Your shopping basket:</h2>
+    <p>
+        
+    </p>
+
+    <table>
+    <thead><tr><th>ProductId</th><th>SupplierId</th><th>Amount</th><th>Shipping</th><th>Shipping Amount</th></tr></thead>
+    <tbody>
+    @foreach (var li in Model.Basket.LineItems)
+    {
+
+        <tr>
+            <td>@li.ProductId</td>
+            <td>@li.SupplierId</td>
+            <td>@li.Amount</td>
+            <td>@li.ShippingDescription</td>
+            <td>@li.ShippingAmount</td>
+            <td class="button-container">@using (Html.BeginForm("RemoveItem", "Home", new {li.Id}, FormMethod.Post))
+                {
+                    <input type="submit" value="Remove" />
+                }
+            </td></tr>
+    }
+    </tbody>
+    </table>
+    </fieldset>
+
+    <fieldset>
+    <h2>Add new item:</h2>
+    @using (Html.BeginForm("AddItem", "Home", FormMethod.Post))
+    {
+        <label>ProductId:</label>
+        @Html.TextBox("ProductId")
+        <br />
+        <label>Amount:</label>
+        @Html.TextBox("Amount")<br />
+        <label>Shipping:</label>
+        @Html.DropDownList("ShippingOption", Model.ShippingOptions.Select(x => new SelectListItem() {Text = x.Key, Value = x.Key}))
+        <br />
+        <label>SupplierId:</label>
+        @Html.TextBox("SupplierId")
+        <br />
+        <label>DeliveryRegion:</label>
+        @Html.DropDownList("DeliveryRegion", typeof (RegionShippingCost.Regions))
+        <br />
+        <input type="submit" value="Submit" />
+    }
+      </fieldset>
