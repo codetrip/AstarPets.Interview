@@ -47,6 +47,97 @@ namespace AstarPets.Interview.Tests
         }
 
         [Test]
+        public void FarRegionShippingOptionTest()
+        {
+            var perFarRegionShippingOption = new FarRegionShipping()
+            {
+                FarRegionCosts = new[]
+                                                                       {
+                                                                           new RegionShippingCost()
+                                                                               {
+                                                                                   DestinationRegion =
+                                                                                       RegionShippingCost.Regions.UK,
+                                                                                   Amount = .75m
+                                                                               },
+                                                                           new RegionShippingCost()
+                                                                               {
+                                                                                   DestinationRegion =
+                                                                                       RegionShippingCost.Regions.Europe,
+                                                                                   Amount = 1.5m
+                                                                               }
+                                                                       },
+            };
+
+            var shippingAmount = perFarRegionShippingOption.GetAmount(new LineItem() { DeliveryRegion = RegionShippingCost.Regions.Europe }, new Basket());
+            Assert.That(shippingAmount, Is.EqualTo(1.5m));
+
+            shippingAmount = perFarRegionShippingOption.GetAmount(new LineItem() { DeliveryRegion = RegionShippingCost.Regions.UK }, new Basket());
+            Assert.That(shippingAmount, Is.EqualTo(.75m));
+        }
+
+        [Test]
+        public void FarRegionShippingOptionSpecialRateTest()
+        {
+            var perFarRegionShippingOption = new FarRegionShipping()
+            {
+                FarRegionCosts = new[]
+                                                                       {
+                                                                           new RegionShippingCost()
+                                                                               {
+                                                                                   DestinationRegion =
+                                                                                       RegionShippingCost.Regions.UK,
+                                                                                   Amount = .75m
+                                                                               },
+                                                                           new RegionShippingCost()
+                                                                               {
+                                                                                   DestinationRegion =
+                                                                                       RegionShippingCost.Regions.Europe,
+                                                                                   Amount = 1.5m
+                                                                               }
+                                                                       },
+            };
+
+
+            var basket = new Basket
+            {
+                LineItems = new List<LineItem>
+                                                 {
+                                                     new LineItem()
+                                                         {
+                                                             DeliveryRegion = RegionShippingCost.Regions.UK,
+                                                             Shipping = perFarRegionShippingOption,
+                                                             ProductId = "1",
+                                                             SupplierId = 1,
+                                                             ShippingAmount = 100m,
+                                                            ShippingDescription = "Product 1"
+                                                         },     
+                                                      new LineItem()
+                                                         {
+                                                             DeliveryRegion = RegionShippingCost.Regions.UK,
+                                                             Shipping = perFarRegionShippingOption,
+                                                             ProductId = "1",
+                                                             SupplierId = 1,
+                                                             ShippingAmount = 100m,
+                                                            ShippingDescription = "Product 2"
+                                                         },  
+                                                 }
+            };
+
+
+            var shippingAmount = perFarRegionShippingOption.GetAmount(new LineItem()
+                                                     {
+                                                         DeliveryRegion = RegionShippingCost.Regions.UK,
+                                                         Shipping = perFarRegionShippingOption,
+                                                         ProductId = "1",
+                                                         SupplierId = 1,
+                                                         ShippingAmount = 200m,
+                                                         ShippingDescription = "Product 3"
+                                                     }, basket);
+            Assert.That(shippingAmount, Is.EqualTo(-0.5m));
+
+        }
+
+        [Test]
         public void BasketShippingTotalTest()
         {
             var perRegionShippingOption = new PerRegionShipping()
@@ -94,5 +185,8 @@ namespace AstarPets.Interview.Tests
 
             Assert.That(basketShipping, Is.EqualTo(3.35m));
         }
+
+        
+
     }
 }
