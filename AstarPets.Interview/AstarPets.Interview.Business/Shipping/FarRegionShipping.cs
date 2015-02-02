@@ -9,13 +9,13 @@ using AstarPets.Interview.Business.Basket;
 
 namespace AstarPets.Interview.Business.Shipping
 {
-    public class PerRegionExShipping : ShippingBase
+    public class FarRegionShipping : ShippingBase
     {
-        public IEnumerable<RegionShippingCost> PerRegionExCosts { get; set; }
+        public IEnumerable<RegionShippingCost> FarRegionCosts { get; set; }
 
         public decimal SpecialDeduction
         {
-            get { return Convert.ToDecimal(ConfigurationManager.AppSettings["PerRegionExShippingDeduction"]); }
+            get { return Convert.ToDecimal(ConfigurationManager.AppSettings["FarRegionShippingDeduction"]); }
         }
 
         public override string GetDescription(LineItem lineItem, Basket.Basket basket)
@@ -26,7 +26,7 @@ namespace AstarPets.Interview.Business.Shipping
         public override decimal GetAmount(LineItem lineItem, Basket.Basket basket)
         {
             return (HasSpecialAmount(lineItem, basket)) ? SpecialDeduction :
-                (from c in PerRegionExCosts
+                (from c in FarRegionCosts
                  where c.DestinationRegion.Equals(lineItem.DeliveryRegion)
                  select c.Amount).Single();
         }
@@ -35,7 +35,7 @@ namespace AstarPets.Interview.Business.Shipping
         {
             return  (basket.LineItems != null &&  basket.LineItems.Count(item => item.DeliveryRegion.Equals(lineItem.DeliveryRegion) &&
                                                   item.SupplierId == lineItem.SupplierId &&
-                                                  item.Shipping is PerRegionExShipping) > 1);
+                                                  item.Shipping is FarRegionShipping) > 1);
         }
     }
 }

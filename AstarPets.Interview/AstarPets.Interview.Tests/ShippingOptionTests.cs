@@ -47,11 +47,11 @@ namespace AstarPets.Interview.Tests
         }
 
         [Test]
-        public void PerRegionExShippingOptionTest()
+        public void FarRegionShippingOptionTest()
         {
-            var perRegionExShippingOption = new PerRegionExShipping()
+            var perFarRegionShippingOption = new FarRegionShipping()
             {
-                PerRegionExCosts = new[]
+                FarRegionCosts = new[]
                                                                        {
                                                                            new RegionShippingCost()
                                                                                {
@@ -68,19 +68,19 @@ namespace AstarPets.Interview.Tests
                                                                        },
             };
 
-            var shippingAmount = perRegionExShippingOption.GetAmount(new LineItem() { DeliveryRegion = RegionShippingCost.Regions.Europe }, new Basket());
+            var shippingAmount = perFarRegionShippingOption.GetAmount(new LineItem() { DeliveryRegion = RegionShippingCost.Regions.Europe }, new Basket());
             Assert.That(shippingAmount, Is.EqualTo(1.5m));
 
-            shippingAmount = perRegionExShippingOption.GetAmount(new LineItem() { DeliveryRegion = RegionShippingCost.Regions.UK }, new Basket());
+            shippingAmount = perFarRegionShippingOption.GetAmount(new LineItem() { DeliveryRegion = RegionShippingCost.Regions.UK }, new Basket());
             Assert.That(shippingAmount, Is.EqualTo(.75m));
         }
 
         [Test]
-        public void PerRegionExShippingOptionSpecialRateTest()
+        public void FarRegionShippingOptionSpecialRateTest()
         {
-            var perRegionExShippingOption = new PerRegionExShipping()
+            var perFarRegionShippingOption = new FarRegionShipping()
             {
-                PerRegionExCosts = new[]
+                FarRegionCosts = new[]
                                                                        {
                                                                            new RegionShippingCost()
                                                                                {
@@ -105,7 +105,7 @@ namespace AstarPets.Interview.Tests
                                                      new LineItem()
                                                          {
                                                              DeliveryRegion = RegionShippingCost.Regions.UK,
-                                                             Shipping = perRegionExShippingOption,
+                                                             Shipping = perFarRegionShippingOption,
                                                              ProductId = "1",
                                                              SupplierId = 1,
                                                              ShippingAmount = 100m,
@@ -114,7 +114,7 @@ namespace AstarPets.Interview.Tests
                                                       new LineItem()
                                                          {
                                                              DeliveryRegion = RegionShippingCost.Regions.UK,
-                                                             Shipping = perRegionExShippingOption,
+                                                             Shipping = perFarRegionShippingOption,
                                                              ProductId = "1",
                                                              SupplierId = 1,
                                                              ShippingAmount = 100m,
@@ -124,10 +124,10 @@ namespace AstarPets.Interview.Tests
             };
 
 
-            var shippingAmount = perRegionExShippingOption.GetAmount(new LineItem()
+            var shippingAmount = perFarRegionShippingOption.GetAmount(new LineItem()
                                                      {
                                                          DeliveryRegion = RegionShippingCost.Regions.UK,
-                                                         Shipping =perRegionExShippingOption,
+                                                         Shipping = perFarRegionShippingOption,
                                                          ProductId = "1",
                                                          SupplierId = 1,
                                                          ShippingAmount = 200m,

@@ -25,7 +25,7 @@ namespace AstarPets.Interview.Tests
                                             new RegionShippingCost{DestinationRegion = RegionShippingCost.Regions.Europe, Amount = 1m},
                                             new RegionShippingCost{DestinationRegion = RegionShippingCost.Regions.RestOfTheWorld, Amount = 2m},
                                         }}},
-                                    {"PerRegionEx", new PerRegionExShipping{PerRegionExCosts = 
+                                    {"FarRegion", new FarRegionShipping{FarRegionCosts = 
                                     new List<RegionShippingCost>
                                         {
                                             new RegionShippingCost{DestinationRegion = RegionShippingCost.Regions.UK, Amount = .5m},
