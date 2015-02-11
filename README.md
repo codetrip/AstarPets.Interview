@@ -38,6 +38,8 @@ We'd like the Shipping App to use the Unit of Work pattern.  For the purposes of
 
 In concrete terms, as the Shipping App is a web app, a "unit of work" will be a web request.  This means that the application code should not be explicitly saving the basket after modification, but instead the framework should somehow know that it has changed and save it at the end of the web request.
 
+*Note that we want to keep the same persistence mechanism; this task does not involve a switch to NHibernate or Entity Framework*
+
 Please produce a document explaining how you might do this, including any restrictions your solution has or considerations as the app continued to be developed.  Your document can include diagrams, pseudo-code or just consist of words.   
 
 Note that the important thing is your ideas and thinking and how you get them across, not the presentation / formatting of the document, so please don't worry unduly about this.
