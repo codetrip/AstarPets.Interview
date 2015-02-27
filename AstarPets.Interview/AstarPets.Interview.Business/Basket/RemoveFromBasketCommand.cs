@@ -1,4 +1,6 @@
-﻿namespace AstarPets.Interview.Business.Basket
+﻿using System.Linq;
+
+namespace AstarPets.Interview.Business.Basket
 {
     public class RemoveFromBasketCommand : BasketOperationBase, IRemoveFromBasketCommand
     {

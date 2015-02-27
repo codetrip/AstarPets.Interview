@@ -18,6 +18,104 @@ namespace AstarPets.Interview.Tests
         }
 
         [Test]
+        public void NewShippingOptionTest()
+        {
+            var newShippingOption = new NewShipping()
+            {
+                PerRegionCosts = new[]
+                {
+                    new RegionShippingCost()
+                        {
+                            DestinationRegion =
+                                RegionShippingCost.Regions.UK,
+                            Amount = .75m
+                        },
+                    new RegionShippingCost()
+                        {
+                            DestinationRegion =
+                                RegionShippingCost.Regions.Europe,
+                            Amount = 1.5m
+                        }
+                }
+            };
+
+            var basket = new Basket()
+            {
+                LineItems = new List<LineItem>
+                {
+                    new LineItem()
+                        {
+                            SupplierId = 1,
+                            DeliveryRegion = RegionShippingCost.Regions.UK,
+                            Shipping = newShippingOption
+                        },
+                    new LineItem()
+                        {
+                            SupplierId = 1,
+                            DeliveryRegion = RegionShippingCost.Regions.Europe,
+                            Shipping = newShippingOption
+                        },
+                    new LineItem() {Shipping = newShippingOption},
+                }
+            };
+
+            var shippingAmount = newShippingOption.GetAmount(new LineItem() { DeliveryRegion = RegionShippingCost.Regions.UK }, basket);
+            Assert.That(shippingAmount, Is.EqualTo(.75m));
+        }
+
+        [Test]
+        public void NewShippingOptionDuplicateTest()
+        {
+            var newShippingOption = new NewShipping()
+            {
+                PerRegionCosts = new[]
+                                                                       {
+                                                                           new RegionShippingCost()
+                                                                               {
+                                                                                   DestinationRegion =
+                                                                                       RegionShippingCost.Regions.UK,
+                                                                                   Amount = .75m
+                                                                               },
+                                                                           new RegionShippingCost()
+                                                                               {
+                                                                                   DestinationRegion =
+                                                                                       RegionShippingCost.Regions.Europe,
+                                                                                   Amount = 1.5m
+                                                                               }
+                                                                       },
+            };
+
+            var duplicateBasket = new Basket()
+            {
+                LineItems = new List<LineItem>
+                {
+                    new LineItem()
+                        {
+                            SupplierId = 1,
+                            DeliveryRegion = RegionShippingCost.Regions.UK,
+                            Shipping = newShippingOption
+                        },
+                    new LineItem()
+                        {
+                            SupplierId = 1,
+                            DeliveryRegion = RegionShippingCost.Regions.UK,
+                            Shipping = newShippingOption
+                        },
+                    new LineItem() {Shipping = newShippingOption},
+                }
+            };
+
+            var shippingAmount = newShippingOption.GetAmount(new LineItem()
+            {
+                SupplierId = 1,
+                DeliveryRegion = RegionShippingCost.Regions.UK,
+                Shipping = newShippingOption
+            }, duplicateBasket);
+            Assert.That(shippingAmount, Is.EqualTo(.25m));
+        }
+
+
+        [Test]
         public void PerRegionShippingOptionTest()
         {
             var perRegionShippingOption = new PerRegionShipping()
@@ -39,10 +137,10 @@ namespace AstarPets.Interview.Tests
                                                                        },
                                               };
 
-            var shippingAmount = perRegionShippingOption.GetAmount(new LineItem() {DeliveryRegion = RegionShippingCost.Regions.Europe}, new Basket());
+            var shippingAmount = perRegionShippingOption.GetAmount(new LineItem() { DeliveryRegion = RegionShippingCost.Regions.Europe }, new Basket());
             Assert.That(shippingAmount, Is.EqualTo(1.5m));
 
-            shippingAmount = perRegionShippingOption.GetAmount(new LineItem() { DeliveryRegion = RegionShippingCost.Regions.UK}, new Basket());
+            shippingAmount = perRegionShippingOption.GetAmount(new LineItem() { DeliveryRegion = RegionShippingCost.Regions.UK }, new Basket());
             Assert.That(shippingAmount, Is.EqualTo(.75m));
         }
 
