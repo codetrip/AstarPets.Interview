@@ -47,6 +47,137 @@ namespace AstarPets.Interview.Tests
         }
 
         [Test]
+        public void SimilarItemAppliesDiscountTest()
+        {
+            var similarItemShippingOption = new SimilarItemShipping
+            {
+                DiscountAmount = 0.5m,
+                SimilarProperties = new[] {"SupplierId", "DeliveryRegion", "Shipping"},
+                PerRegionCosts = new[]
+                {
+                    new RegionShippingCost {Amount = 0.5m, DestinationRegion = RegionShippingCost.Regions.UK},
+                    new RegionShippingCost {Amount = 1m, DestinationRegion = RegionShippingCost.Regions.Europe},
+                    new RegionShippingCost {Amount = 2m, DestinationRegion = RegionShippingCost.Regions.RestOfTheWorld}
+                }
+            };
+
+            var basket = new Basket
+            {
+                LineItems =
+                    new List<LineItem>
+                    {
+                        new LineItem
+                        {
+                            Amount = 2m,
+                            SupplierId = 1,
+                            DeliveryRegion = RegionShippingCost.Regions.RestOfTheWorld,
+                            Shipping = similarItemShippingOption
+                        },
+                        new LineItem
+                        {
+                            Amount = 5m,
+                            SupplierId = 1,
+                            DeliveryRegion = RegionShippingCost.Regions.RestOfTheWorld,
+                            Shipping = similarItemShippingOption
+                        }
+                    }
+            };
+
+            var calculator = new ShippingCalculator();
+            var basketShipping = calculator.CalculateShipping(basket);
+
+            Assert.That(basketShipping, Is.EqualTo(3m));
+        }
+
+        [Test]
+        public void NoDiscountForNotSameShippingTest()
+        {
+            var similarItemShippingOption = new SimilarItemShipping
+            {
+                DiscountAmount = 0.5m,
+                SimilarProperties = new[] { "SupplierId", "DeliveryRegion", "Shipping" },
+                PerRegionCosts = new[]
+                {
+                    new RegionShippingCost {Amount = 0.5m, DestinationRegion = RegionShippingCost.Regions.UK},
+                    new RegionShippingCost {Amount = 1m, DestinationRegion = RegionShippingCost.Regions.Europe},
+                    new RegionShippingCost {Amount = 2m, DestinationRegion = RegionShippingCost.Regions.RestOfTheWorld}
+                }
+            };
+
+            var flatRateShippingOption = new FlatRateShipping { FlatRate = 1m };
+
+            var basket = new Basket
+            {
+                LineItems =
+                    new List<LineItem>
+                    {
+                        new LineItem
+                        {
+                            Amount = 2m,
+                            SupplierId = 1,
+                            DeliveryRegion = RegionShippingCost.Regions.RestOfTheWorld,
+                            Shipping = similarItemShippingOption
+                        },
+                        new LineItem
+                        {
+                            Amount = 5m,
+                            SupplierId = 1,
+                            DeliveryRegion = RegionShippingCost.Regions.RestOfTheWorld,
+                            Shipping = flatRateShippingOption
+                        }
+                    }
+            };
+
+            var calculator = new ShippingCalculator();
+            var basketShipping = calculator.CalculateShipping(basket);
+
+            Assert.That(basketShipping, Is.EqualTo(3m));
+        }
+        
+        [Test]
+        public void NoDiscountForNotSameProperties()
+        {
+            var similarItemShippingOption = new SimilarItemShipping
+            {
+                DiscountAmount = 0.5m,
+                SimilarProperties = new[] { "SupplierId", "DeliveryRegion" },
+                PerRegionCosts = new[]
+                {
+                    new RegionShippingCost {Amount = 0.5m, DestinationRegion = RegionShippingCost.Regions.UK},
+                    new RegionShippingCost {Amount = 1m, DestinationRegion = RegionShippingCost.Regions.Europe},
+                    new RegionShippingCost {Amount = 2m, DestinationRegion = RegionShippingCost.Regions.RestOfTheWorld}
+                }
+            };
+
+            var basket = new Basket
+            {
+                LineItems =
+                    new List<LineItem>
+                    {
+                        new LineItem
+                        {
+                            Amount = 2m,
+                            SupplierId = 2,
+                            DeliveryRegion = RegionShippingCost.Regions.Europe,
+                            Shipping = similarItemShippingOption
+                        },
+                        new LineItem
+                        {
+                            Amount = 5m,
+                            SupplierId = 1,
+                            DeliveryRegion = RegionShippingCost.Regions.RestOfTheWorld,
+                            Shipping = similarItemShippingOption
+                        }
+                    }
+            };
+
+            var calculator = new ShippingCalculator();
+            var basketShipping = calculator.CalculateShipping(basket);
+
+            Assert.That(basketShipping, Is.EqualTo(3m));
+        }
+
+        [Test]
         public void BasketShippingTotalTest()
         {
             var perRegionShippingOption = new PerRegionShipping()

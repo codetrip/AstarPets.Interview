@@ -10,7 +10,7 @@ namespace AstarPets.Interview.Business.Shipping
     {
         public static IEnumerable<Type> KnownTypes()
         {
-            return new[] {typeof (FlatRateShipping), typeof (PerRegionShipping)};
+            return new[] {typeof (FlatRateShipping), typeof (PerRegionShipping), typeof(SimilarItemShipping)};
         }
         
         public abstract string GetDescription(LineItem lineItem, Basket.Basket basket);
