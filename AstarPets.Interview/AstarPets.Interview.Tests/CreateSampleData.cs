@@ -15,16 +15,18 @@ namespace AstarPets.Interview.Tests
         [Test]
         public void CreateSampleShippingOptions()
         {
+            var regionShippingCosts = new List<RegionShippingCost>
+            {
+                new RegionShippingCost{DestinationRegion = RegionShippingCost.Regions.UK, Amount = .5m},
+                new RegionShippingCost{DestinationRegion = RegionShippingCost.Regions.Europe, Amount = 1m},
+                new RegionShippingCost{DestinationRegion = RegionShippingCost.Regions.RestOfTheWorld, Amount = 2m},
+            };
+
             var shippings = new Dictionary<string, ShippingBase>
                                 {
                                     {"FlatRate", new FlatRateShipping{FlatRate = 1.5m}},
-                                    {"PerRegion", new PerRegionShipping{PerRegionCosts = 
-                                    new List<RegionShippingCost>
-                                        {
-                                            new RegionShippingCost{DestinationRegion = RegionShippingCost.Regions.UK, Amount = .5m},
-                                            new RegionShippingCost{DestinationRegion = RegionShippingCost.Regions.Europe, Amount = 1m},
-                                            new RegionShippingCost{DestinationRegion = RegionShippingCost.Regions.RestOfTheWorld, Amount = 2m},
-                                        }}}
+                                    {"PerRegion", new PerRegionShipping{PerRegionCosts = regionShippingCosts}},
+                                    {"PerRegionWithMultiDiscount", new PerRegionWithMultiItemDiscountShipping{ Discount = 0.5m, PerRegionCosts = regionShippingCosts}},
                                 };
 
             var ser = SerializationHelper.DataContractSerialize(shippings);
